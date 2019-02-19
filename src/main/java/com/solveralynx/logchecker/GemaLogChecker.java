@@ -2,22 +2,25 @@ package com.solveralynx.logchecker;
 
 import com.solveralynx.logging.Logger;
 import com.solveralynx.logging.LoggerFactory;
-import sun.plugin2.message.transport.Transport;
+import org.apache.commons.io.FileUtils;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class GemaLogChecker {
 
     private static final Logger logger = LoggerFactory.getLogger("gema-logchecker");
     private static final String LOG_CHECKER_PROPERTIES = "logchecker.properties";
-    private String exception = "FullAjaxExcepionHandler";
+    private Properties properties = GemaLogChecker.getProperties(LOG_CHECKER_PROPERTIES);
 
     private static Properties getProperties(String resource) {
         Properties properties = new Properties();
@@ -35,45 +38,60 @@ public class GemaLogChecker {
         return properties;
     }
 
-    private void checkFile() {
-
-        Properties properties = GemaLogChecker.getProperties(LOG_CHECKER_PROPERTIES);
+    private void findPattern() {
         if (properties == null) {
             System.exit(3);
         }
-
-        final String userEmailFrom = properties.getProperty("emailTo");
         final String filePath = properties.getProperty("filePath");
-        final String usernameEmailTo = properties.getProperty("filePath");
-        final String host = properties.getProperty("host");
-        logger.info("Checking a file!");
+        String specifiedText = "FullAjaxExceptionHandler";
         try {
-            File file = new File(usernameEmailTo);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String text = null;
-
-            while ((text = reader.readLine()) != null) {
-                // Print the content on the console
-                System.out.println(text);
-                //if(text = reader.readLine().startsWith(exception)){
-
-                Session session = Session.getDefaultInstance("mail.smtp.host",host);
-
-
-                    MimeMessage message = new MimeMessage(session);
-
-
-                    Transport.send(message);
-                    System.out.println("Sent message successfully....");
-
+            File file = FileUtils.getFile(filePath);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.contains(specifiedText)) {
+                    sendMessage();
+                    logger.warn(specifiedText + " found in this log. Sending an email...");
+                    break;
+                } else {
+                    logger.info(specifiedText + " not found in this line.");
+                }
             }
-            System.out.println("file:");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    private void sendMessage() {
+        if (properties == null) {
+            System.exit(1);
+        }
+
+        final String to = properties.getProperty("emailTo");
+        final String from = properties.getProperty("emailFrom");
+        final String subject = properties.getProperty("emailSubject");
+        final String description = properties.getProperty("emailDescription");
+        final String host = properties.getProperty("host");
+        final String smtp = properties.getProperty("smtp");
+
+        properties.put(smtp, host);
+        Session session = Session.getDefaultInstance(properties);
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setDescription(description);
+
+            Transport.send(message);
+            logger.info("Send message successfully!");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-        new GemaLogChecker().checkFile();
+        new GemaLogChecker().findPattern();
     }
 }
