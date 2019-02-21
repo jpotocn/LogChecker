@@ -45,13 +45,14 @@ public class GemaLogChecker {
         final String filePath = properties.getProperty("filePath");
         String specifiedText = "FullAjaxExceptionHandler";
         try {
-            File file = FileUtils.getFile(filePath);
-            Scanner scanner = new Scanner(file);
+            File fileDir = FileUtils.getFile(getLastModified(filePath));
+            logger.warn("Checking log: " + fileDir);
+            Scanner scanner = new Scanner(fileDir);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (line.contains(specifiedText)) {
+                    logger.warn(specifiedText + " found in a log: " + fileDir + ".Sending an email...");
                     sendMessage();
-                    logger.warn(specifiedText + " found in this log. Sending an email...");
                     break;
                 } else {
                     logger.info(specifiedText + " not found in this line.");
@@ -60,6 +61,27 @@ public class GemaLogChecker {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private static File getLastModified(String dirPath) {
+        File lastModifiedFile = null;
+        try {
+            File dir = new File(dirPath);
+            File[] files = dir.listFiles();
+            if (files == null || files.length == 0) {
+                return null;
+            }
+
+            lastModifiedFile = files[0];
+            for (int i = 1; i < files.length; i++) {
+                if (lastModifiedFile.lastModified() < files[i].lastModified()) {
+                    lastModifiedFile = files[i];
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return lastModifiedFile;
     }
 
     private void sendMessage() {
@@ -72,9 +94,9 @@ public class GemaLogChecker {
         final String subject = properties.getProperty("emailSubject");
         final String description = properties.getProperty("emailDescription");
         final String host = properties.getProperty("host");
-        final String smtp = properties.getProperty("smtp");
 
-        properties.put(smtp, host);
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host",host);
         Session session = Session.getDefaultInstance(properties);
 
         try {
