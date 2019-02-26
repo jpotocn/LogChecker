@@ -4,12 +4,7 @@ import com.solveralynx.logging.Logger;
 import com.solveralynx.logging.LoggerFactory;
 import org.apache.commons.io.FileUtils;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +47,7 @@ public class GemaLogChecker {
                 String line = scanner.nextLine();
                 if (line.contains(specifiedText)) {
                     logger.warn(specifiedText + " found in a log: " + fileDir + ".Sending an email...");
-                    sendMessage();
+                    //sendEmail();
                     break;
                 } else {
                     logger.info(specifiedText + " not found in this line.");
@@ -84,34 +79,37 @@ public class GemaLogChecker {
         return lastModifiedFile;
     }
 
-    private void sendMessage() {
-        if (properties == null) {
-            System.exit(1);
-        }
-
-        final String to = properties.getProperty("emailTo");
-        final String from = properties.getProperty("emailFrom");
-        final String subject = properties.getProperty("emailSubject");
-        final String description = properties.getProperty("emailDescription");
-        final String host = properties.getProperty("host");
-
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host",host);
-        Session session = Session.getDefaultInstance(properties);
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setDescription(description);
-
-            Transport.send(message);
-            logger.info("Send message successfully!");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+    private void sendEmail() throws MessagingException {
+        //TODO: Disabled because of an error.
     }
+    //    if (properties == null) {
+    //        System.exit(1);
+    //    }
+    //
+    //    final String to = properties.getProperty("emailTo");
+    //    final String from = properties.getProperty("emailFrom");
+    //    final String subject = properties.getProperty("emailSubject");
+    //    final String description = properties.getProperty("emailDescription");
+    //    final String host = properties.getProperty("host");
+    //
+    //    try {
+    //        Properties properties = new Properties();
+    //        properties.setProperty("mail.host", host);
+    //        Session session = Session.getDefaultInstance(properties);
+    //        session = Session.getDefaultInstance(properties, null);
+    //        MimeMessage mimeMessage = new MimeMessage(session);
+    //        mimeMessage.setFrom(new InternetAddress(from));
+    //        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+    //        mimeMessage.setSubject(subject);
+    //        mimeMessage.setDescription(description);
+    //
+    //        Transport.send(mimeMessage);
+    //
+    //        logger.info("Send message successfully!");
+    //    } catch (SendFailedException e) {
+    //        e.printStackTrace();
+    //    }
+    //}
 
     public static void main(String[] args) {
         new GemaLogChecker().findPattern();
