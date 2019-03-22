@@ -13,11 +13,9 @@ import java.util.Properties;
 public class PropertiesUtils {
 
     private static final Logger logger = LoggerFactory.getLogger("logChecker");
+    private static String encoding;
+    private static final String DEFAULT_ENCODING = "UTF-8";
 
-    /**
-     * @param resourceName is the path of properties file
-     * @return properties, loaded from file with path as 'resourceName'
-     */
     public static Properties getProperties(String resourceName) {
         Properties properties = new Properties();
         logger.info("Creating properties from '%s'", resourceName);

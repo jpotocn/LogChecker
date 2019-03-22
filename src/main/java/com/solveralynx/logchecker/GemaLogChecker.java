@@ -11,19 +11,19 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class GemaLogChecker {
-
     private static Logger logger = LoggerFactory.getLogger("logchecker");
     private static final String LOG_CHECKER_PROPERTIES = "logchecker.properties";
     private Properties properties = PropertiesUtils.getProperties(LOG_CHECKER_PROPERTIES);
+    public static File fileDir;
 
     private void findPattern() {
         if (properties == null) {
             System.exit(3);
         }
-        final String filePath = properties.getProperty("dirPath");
+        String filePath = properties.getProperty("dirPath");
         String specifiedText = "FullAjaxExceptionHandler";
         try {
-            File fileDir = FileUtils.getFile(getLastFile(filePath));
+            fileDir = FileUtils.getFile(getLastFile(filePath));
             logger.info("Reading last modified file..................... " + "(" + fileDir + ")");
             Scanner scanner = new Scanner(fileDir);
             while (scanner.hasNextLine()) {
@@ -35,11 +35,11 @@ public class GemaLogChecker {
                 }
             }
         } catch (Exception ex) {
-            logger.error("Error getting into the file: " + ex.getMessage());
+            logger.error("Error getting into the directory: " + ex.getMessage());
         }
     }
 
-    private static File getLastFile(String dirPath) {
+    public static File getLastFile(String dirPath) {
         File lastFile = null;
         try {
             File directory = new File(dirPath);
@@ -56,7 +56,7 @@ public class GemaLogChecker {
                 }
             }
         } catch (Exception ex) {
-            logger.warn("Could not pull last modified file." + ex.getMessage());
+            logger.error("Error pulling last modified file: " + ex.getMessage());
         }
         return lastFile;
     }
