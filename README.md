@@ -19,7 +19,7 @@ Say what the step will be
 2. Open pom.xml file in the root of the project
 3. In the 'logchecker.properties' file change the 'filePath' to the actual file path where your logs will go on your local machine
 4. Change your mail.host property to your actual
-4. Run the program
+5. Run the program
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
