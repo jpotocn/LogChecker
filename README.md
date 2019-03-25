@@ -17,7 +17,8 @@ Say what the step will be
 ```
 1. Clone the repo
 2. Open pom.xml file in the root of the project
-3. In the 'logchecker.properties' file change the 'filePath' to the actual file path on your local machine 
+3. In the 'logchecker.properties' file change the 'filePath' to the actual file path where your logs will go on your local machine
+4. Change your mail.host property to your actual
 4. Run the program
 ```
 
