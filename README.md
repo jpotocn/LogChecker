@@ -1,4 +1,5 @@
 # GemaLogChecker
+<h2>GemaLogChecker</h2>
 
 Standalone app which checks if the .log file is containing an FullAjaxExceptionHandler exception. 
 If it's included, then the app will send an email to admin.
