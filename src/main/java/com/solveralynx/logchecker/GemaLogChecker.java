@@ -20,13 +20,15 @@ public class GemaLogChecker {
         if (properties == null) {
             System.exit(3);
         }
+        int readWaitTime = 1500;
         String filePath = properties.getProperty("dirPath");
-        String specifiedText = "FullAjaxExceptionHandler";
+        String specifiedText = properties.getProperty("pattern");
         try {
             fileDir = FileUtils.getFile(getLastFile(filePath));
-            logger.info("Reading last modified file..................... " + "(" + fileDir + ")");
             Scanner scanner = new Scanner(fileDir);
             while (scanner.hasNextLine()) {
+                Thread.sleep(readWaitTime);
+                logger.info("Reading last modified file..................... " + "(" + fileDir + ")");
                 String line = scanner.nextLine();
                 if (!line.contains(specifiedText)) {
                     logger.info(specifiedText + " found in a log:............(" + fileDir + ")");
