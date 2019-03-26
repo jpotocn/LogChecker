@@ -3,7 +3,7 @@
 Standalone app which checks if the .log file is containing an FullAjaxExceptionHandler exception. 
 If it's included, then the app will send an email to admin.
 
-![alt text](https://raw.githubusercontent.com/jpotocn/LogChecker/master/pictures/logChecker.png)
+![alt text](https://raw.githubusercontent.com/jpotocn/LogChecker/master/images/logChecker.png)
 
 ## Getting Started
 
