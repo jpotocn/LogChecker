@@ -9,3 +9,11 @@ logs/
 # IntelliJ
 /out/
 /target/
+/classes/
+
+# Ignore gradle specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+/build/
+git add 

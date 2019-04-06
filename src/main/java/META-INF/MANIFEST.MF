@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: org.apache.commons.io-2.4.jar logback-core-1.0.11.jar mail
+ -1.4.4.jar slf4j-api-1.7.4.jar activation-1.1.jar logback-classic-1.0
+ .11.jar commons-io-2.4.jar logging-1.0.0.jar
+Main-Class: com.solveralynx.logchecker.GemaLogChecker
+
