@@ -20,23 +20,18 @@ public class GemaLogChecker {
         if (properties == null) {
             System.exit(3);
         }
-        int readWaitTime = 1500;
         String filePath = properties.getProperty("dirPath");
         String specifiedPattern = properties.getProperty("pattern");
         try {
             fileDir = FileUtils.getFile(getLastFile(filePath));
             Scanner scanner = new Scanner(fileDir);
             while (scanner.hasNextLine()) {
-                Thread.sleep(readWaitTime);
                 logger.info("Reading last modified file..................... " + "(" + fileDir + ")");
                 String line = scanner.nextLine();
                 if (line.contains(specifiedPattern)) {
                     logger.info(specifiedPattern + " found in a log:............(" + fileDir + ")");
                     MailSender.sendMail();
                     break;
-                }else{
-                    logger.info(specifiedPattern + " not found in a file: " + "(" + fileDir + ")");
-                    System.exit(2);
                 }
             }
         } catch (Exception ex) {
