@@ -22,7 +22,7 @@ Say what the step will be
 ```
 ## Built With
 
-* [Maven](https://maven.apache.org/) - Dependency Management
+* [Gradle](https://gradle.org/) - Dependency Management
 
 ## Contributing
 
