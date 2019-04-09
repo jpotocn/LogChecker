@@ -1,7 +1,6 @@
 # GemaLogChecker
 
-Standalone app which checks if the .log file is containing <specifiedPattern>. 
-If it's included, then the app will send an email to admin.
+Standalone app which checks if the .log file is containing "specifiedPattern". If it's included, then the app will send an email to admin.
 
 ![alt text](https://raw.githubusercontent.com/jpotocn/LogChecker/master/images/logChecker.png)
 
@@ -13,8 +12,6 @@ These instructions will get you a copy of the project up and running on your loc
 ### Run the program
 
 A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
 
 ```
 1. Specify the path to your .log file and the pattern you wanna search for in the .properties file
