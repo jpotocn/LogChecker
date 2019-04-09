@@ -1,7 +1,6 @@
 # GemaLogChecker
 
-Standalone app which checks if the .log file is containing an FullAjaxExceptionHandler exception. 
-If it's included, then the app will send an email to admin.
+Standalone app which checks if the .log file is containing "specifiedPattern". If it's included, then the app will send an email to admin.
 
 ![alt text](https://raw.githubusercontent.com/jpotocn/LogChecker/master/pictures/logChecker.png)
 
@@ -14,18 +13,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
-
 ```
-1. Clone the repo
-2. Open pom.xml file in the root of the project
-3. In the 'logchecker.properties' file change the 'filePath' to the actual file path where your logs will go on your local machine
-4. Change your mail.host property to your actual
-5. Run the program
+1. Specify the path to your .log file and the pattern you wanna search for in the .properties file
+2. Cd to the jar and run java -jar gema-logchecker-all-1.0-SNAPSHOT.jar
 ```
 ## Built With
 
-* [Maven](https://maven.apache.org/) - Dependency Management
+* [Gradle](https://www.gradle.org/) - Dependency Management
 
 ## Contributing
 
