@@ -1,0 +1,73 @@
+plugins {
+  id 'java'
+  id 'maven-publish'
+}
+
+repositories {
+  mavenLocal()
+  maven {
+    url = 'http://shirov:6660/nexus/content/groups/public'
+  }
+
+  maven {
+    url = 'http://shirov:6660/nexus/content/repositories/solveralynx-internal-releases'
+  }
+
+  maven {
+    url = 'http://shirov:6660/nexus/content/repositories/solveralynx-internal-snapshots'
+  }
+
+  maven {
+    url = 'http://repo.maven.apache.org/maven2'
+  }
+}
+
+dependencies {
+  compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+  compile 'com.solveralynx:logging:1.0.0'
+  compile 'javax.mail:mail:1.4.4'
+  compile 'log4j:log4j:1.2.16'
+  compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+}
+
+group = 'com.solveralynx'
+version = '1.0-SNAPSHOT'
+description = 'gema-logchecker'
+sourceCompatibility = '1.8'
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from(components.java)
+    }
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+task fatJar(type: Jar) {
+  manifest {
+    def propsPath = 'properties/'
+    def classPath = configurations.compile.collect { it.getName() }.join(' ') + " " + propsPath
+    attributes(
+            'Class-Path': classPath,
+            'Main-Class': 'com.solveralynx.logchecker.GemaLogChecker')
+  }
+  baseName = project.name + '-all'
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  exclude('logchecker.properties')
+
+  with jar
+}
+
+task initConfig(type: Copy) {
+  from 'src/main/resources'
+  into 'build/libs/properties/'
+  include('**/*.properties')
+  include('**/*.xml')
+}
+fatJar.dependsOn initConfig
+
+
