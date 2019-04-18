@@ -1,4 +1,4 @@
-![alt text]https://img.shields.io/badge/v%201.0-log--checker-red.svg
+![alt text](https://img.shields.io/badge/v%201.0-log--checker-red.svg)
 # GemaLogChecker
 
 Standalone app which checks if the .log file is containing "specifiedPattern". If it's included, then the app will send an email to admin.
